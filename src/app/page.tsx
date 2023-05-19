@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import useSound from "use-sound";
+import { Howl } from "howler";
 
-import finalCountdown from "./sounds/finalCountdown.mp3";
-//import f from "../../public/resources/final";
+const sound = new Howl({
+  src: ["./finalCountdownCropped2.mp3"],
+});
 
 export default function Home() {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [isStarting, setIsStarting] = useState(false);
-  const [play, { stop }] = useSound(finalCountdown);
 
   const timeRuler = () => {
     if (seconds === 59) {
@@ -24,7 +24,6 @@ export default function Home() {
   //why useffect : to synchronize the incrementation of time (sec and min) with timer state
   //by using an interval which execute a function each second
   //beware of cleaning the interval when time stopped or paused
-
   useEffect(() => {
     let interv = null;
 
@@ -37,29 +36,23 @@ export default function Home() {
 
   const handleStart = () => {
     setIsStarting(true);
-    play();
+    sound.play();
   };
 
   const handlePause = () => {
     setIsStarting(false);
-    stop();
+    sound.stop();
   };
 
   const handleReset = () => {
     setMinutes(0);
     setSeconds(0);
     setIsStarting(false);
-    stop();
+    sound.stop();
   };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 font-mono">
-      <audio autoPlay loop>
-        <source
-          src="../../public/resources/finalCountdown.mp3"
-          type="audio/mpeg"
-        />
-      </audio>
       <div className="z-10 w-full max-w-5xl items-center justify-between  text-sm lg:flex">
         <p>It's a final countdown</p>
       </div>
@@ -72,10 +65,13 @@ export default function Home() {
       <div className="relative flex mt-[50px] mb-[50px]">
         <button
           onClick={handleStart}
-          className="absolute top-1 bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+          className={`absolute top-1 bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 border border-blue-700 rounded ${
+            isStarting ? "opacity-50 cursor-none" : ""
+          }`}
         >
           START
         </button>
+
         <button
           onClick={handlePause}
           className="absolute top-12 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
@@ -93,8 +89,9 @@ export default function Home() {
         <p>
           Enjoy this stressing render to a{" "}
           <strong>massively stressing technical test</strong>, which consists on
-          coding a timer <strong>under countdown</strong>. If I had more time, I
-          would have :
+          coding a timer <strong>under countdown</strong>. My weak skills and my
+          absence of self-confidence suffered from the pression of time, so, if
+          I had more time, I would have :
         </p>
         <ul>
           <li>
@@ -123,11 +120,12 @@ export default function Home() {
         </ul>
         <p>
           <strong>
-            See : this lack of elementary practice respect adds at least 70
-            minutes - 1 hour + 1/2 - to my technical test. My countdown
-            technical test. Does it make any sense ?
+            See : these elementary practice respect would have added at least 70
+            minutes - 1 hour + 1/2 - to my timered technical test. So does the
+            concept of timered technical test make any sense ?
           </strong>
         </p>
+        <p>BTW, enjoy the music :)</p>
       </div>
     </main>
   );
