@@ -41,7 +41,7 @@ export default function Home() {
 
   const handlePause = () => {
     setIsStarting(false);
-    sound.stop();
+    sound.pause();
   };
 
   const handleReset = () => {
